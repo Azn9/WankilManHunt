@@ -1,0 +1,49 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '6.1.0'
+    id "org.sonarqube" version "3.1.1"
+}
+
+sonarqube {
+    properties {
+        property "sonar.projectKey", "azn9-wankil-commissions_manhunt_AXgNjaagc_F-MyGWLtHg"
+        property "sonar.qualitygate.wait", true
+    }
+}
+
+group = 'dev.azn9'
+version = '1.0-SNAPSHOT'
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+def $nexusUsername = project.hasProperty("azn9NexusUser") ? "$azn9NexusUser" : System.getenv("azn9NexusUser")
+def $nexusPassword = project.hasProperty("azn9NexusPass") ? "$azn9NexusPass" : System.getenv("azn9NexusPass")
+
+repositories {
+    mavenCentral()
+    maven {
+        credentials {
+            username $nexusUsername
+            password $nexusPassword
+        }
+
+        url = 'https://nexus.azn9.dev/repository/maven-snapshots/'
+    }
+}
+
+dependencies {
+    compileOnly 'org.spigotmc:spigot:1.16.5-SNAPSHOT'
+
+    compile "io.github.classgraph:classgraph:4.8.102"
+    compile 'org.apache.commons:commons-compress:1.19'
+    compile 'org.jetbrains:annotations:20.1.0'
+}
+
+processResources {
+    from(sourceSets.main.resources.srcDirs) {
+        filter ReplaceTokens, tokens: [version: version]
+    }
+}

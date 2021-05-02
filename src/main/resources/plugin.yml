@@ -1,0 +1,6 @@
+name: WankilHunter
+version: @version@
+main: dev.azn9.wankilhunter.WankilHunter
+api-version: 1.16
+authors: [ Azn9, roro1506_HD ]
+load: STARTUP
