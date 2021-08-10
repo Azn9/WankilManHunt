@@ -64,6 +64,7 @@ public class GameManager {
     private Team runnerTeam;
     private boolean objectifCompleted;
     private Location spawnLocation;
+    private Location respawnLocation;
 
     public void init(JsonConfig config) {
         this.config = config;
@@ -156,6 +157,18 @@ public class GameManager {
 
         new TeleportRunnable(players, () -> {
             this.spawnLocation = players.get(0).getCraftPlayer().getLocation();
+
+            this.respawnLocation = this.spawnLocation.clone();
+            this.respawnLocation.setY(251);
+            for (int x = -1; x < 2; x++) {
+                for (int y = -1; y < 5; y++) {
+                    for (int z = -1; z < 2; z++) {
+                        this.respawnLocation.clone().add(x, y, z).getBlock().setType(Material.BARRIER);
+                    }
+                }
+            }
+
+            this.respawnLocation.clone().add(0, 1, 0).getBlock().setType(Material.AIR);
 
             spectators.forEach(gamePlayer -> {
                 gamePlayer.setSpectator(true);
@@ -447,5 +460,9 @@ public class GameManager {
 
     public Location getSpawnLocation() {
         return this.spawnLocation;
+    }
+
+    public Location getRespawnLocation() {
+        return this.respawnLocation;
     }
 }

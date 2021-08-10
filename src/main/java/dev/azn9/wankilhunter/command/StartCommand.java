@@ -28,11 +28,6 @@ public class StartCommand extends Command {
             return false;
         }
 
-        if (gameManager.getPlayers().size() < 2) {
-            sender.sendMessage("§cVous ne pouvez pas lancer une partie avec seulement un joueur !");
-            //return false;
-        }
-
         gameManager.startGame();
 
         return true;
